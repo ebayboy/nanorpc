@@ -35,6 +35,7 @@
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/stubs/common.h>
 
+//结构体封装了：google  Service + Message（request_） + Message（response_） + MethodDescriptor（method_）
 namespace nrpc {
 struct RpcMethod {
 public:

@@ -50,6 +50,7 @@ void nrpc::RpcServer::EndPoint(const char* url)
 	sock.bind(url);
 }
 
+//从service中获取descriptor request  response
 void nrpc::RpcServer::RegisterService(google::protobuf::Service *service)
 {
 	const google::protobuf::ServiceDescriptor *descriptor = service->GetDescriptor();
@@ -70,16 +71,24 @@ void nrpc::RpcServer::RegisterService(google::protobuf::Service *service)
 void nrpc::RpcServer::Start()
 {
 	uint64_t opcode = 0;
+
 	while (1) {
+		//循环处理
+		
+		//recv buffer
 		char* buf=NULL;
 		int bytes = sock.recv(&buf, NN_MSG, 0);
 		if (bytes<=0) continue;
 		memcpy((char*)(&opcode), buf, sizeof(opcode));
+
+		//map.find(hash)
 		RpcMethodMap::const_iterator iter = rpc_method_map_.find(opcode);
 		if (iter == rpc_method_map_.end()) {
 			continue;
 		}
-		RpcMethod *rpc_method = iter->second;
+		RpcMethod *rpc_method = iter->second; // iter->second -> RpcMethod
+
+		//find rpc_method
 		const google::protobuf::MethodDescriptor *method = rpc_method->method_;
 		google::protobuf::Message *request = rpc_method->request_->New();
 		google::protobuf::Message *response = rpc_method->response_->New();

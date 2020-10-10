@@ -36,6 +36,7 @@
 #include <google/protobuf/message.h>
 #include <string>
 
+// RpcChannel : 继承 protobuf::RpcChannel， 实现了virtual void CallMethod
 namespace nrpc {
 class RpcChannel : public google::protobuf::RpcChannel {
 public:
